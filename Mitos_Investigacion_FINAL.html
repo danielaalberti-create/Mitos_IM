@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mitos de la Investigación de Mercados</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg:    #0a0b10;
+  --panel: #12141d;
+  --border: rgba(255,255,255,0.08);
+  --white: #f0f2ff;
+  --text:  #94a3b8;
+  --c1: #38bdf8;  /* Blue */
+  --c2: #fbbf24;  /* Amber */
+  --c3: #818cf8;  /* Indigo */
+  --c4: #34d399;  /* Emerald */
+  --c5: #f472b6;  /* Pink */
+  --c-welcome: #a855f7; /* Purple for Welcome */
+  --accent-soft: rgba(255, 255, 255, 0.05);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; background: var(--bg); }
+
+body {
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9990;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+}
+
+/* ════════════════════ PORTADA ════════════════════ */
+#intro-screen {
+  position: fixed; inset:0; z-index:100;
+  display: flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  background: var(--bg); text-align:center; padding: 40px;
+}
+
+.intro-eyebrow {
+  font-family:'Space Mono', monospace; font-size:14px;
+  letter-spacing:6px; text-transform:uppercase;
+  color: var(--c1); margin-bottom:24px;
+}
+
+.intro-title {
+  font-family:'Bebas Neue', sans-serif;
+  font-size: clamp(50px, 7vw, 100px);
+  line-height:0.9; letter-spacing:1px;
+  color: var(--white); margin-bottom:12px;
+}
+
+.intro-subtitle {
+  font-family:'Bebas Neue', sans-serif;
+  font-size: clamp(26px, 3.5vw, 44px);
+  color: var(--c1); letter-spacing:2px;
+  margin-bottom:48px; opacity: 0.9;
+}
+
+.intro-start {
+  font-family:'Space Mono', monospace; font-size:14px;
+  letter-spacing:4px; text-transform:uppercase;
+  background: var(--c1); color:#000;
+  border:none; padding:20px 50px;
+  cursor:pointer; transition: all .3s ease;
+}
+.intro-start:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(56,189,248,0.3); }
+
+/* ════════════════════ LAYOUT PRINCIPAL ════════════════════ */
+#app { width:100vw; height:100vh; display:grid; grid-template-columns: 350px 1fr; opacity:0; }
+
+#sidebar {
+  background: var(--panel); border-right: 1px solid var(--border);
+  display:flex; flex-direction:column; padding:40px 24px; gap:16px;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  font-family:'Space Mono', monospace; font-size:10px;
+  letter-spacing:5px; text-transform:uppercase;
+  color: var(--text); margin-bottom:20px; padding-bottom:15px;
+  border-bottom:1px solid var(--border);
+}
+
+.myth-btn {
+  background:transparent; border:1px solid var(--border);
+  padding:20px; text-align:left; cursor:pointer;
+  transition: all .25s; border-radius: 4px;
+}
+.myth-btn.active { background: var(--accent-soft); border-color: var(--accent); }
+.myth-btn-num { font-family:'Space Mono', monospace; font-size:10px; color: var(--accent); display:block; margin-bottom:6px; letter-spacing: 2px; }
+.myth-btn-text { font-size:14px; font-weight: 500; color: white; line-height:1.2; }
+
+.welcome-sidebar-btn {
+  margin-top: auto;
+  border: 2px solid var(--c-welcome);
+  background: rgba(168, 85, 247, 0.05);
+}
+.welcome-sidebar-btn.active { background: var(--c-welcome); }
+.welcome-sidebar-btn.active .myth-btn-text, 
+.welcome-sidebar-btn.active .myth-btn-num { color: #000; }
+
+/* ════════════════════ ESCENARIO DE CONTENIDO ════════════════════ */
+#stage { position:relative; display:flex; align-items:center; justify-content:center; background: #0c0e14; overflow: hidden; }
+
+.stage-bg-text {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue', sans-serif; font-size: 30vw;
+  color: rgba(255,255,255,.01); pointer-events:none;
+}
+
+.myth-card { width:min(900px, 94%); display:none; position:relative; z-index: 5; }
+.myth-card.active { display:block; }
+
+.card-myth { background: var(--panel); border:1px solid var(--border); padding:64px; border-radius:4px; box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
+.card-myth-text { font-family:'Bebas Neue', sans-serif; font-size: 46px; line-height:1.05; color: var(--white); margin-bottom:44px; }
+
+.reveal-btn {
+  background: var(--accent); color: #000; border:none; padding:22px;
+  font-family:'Space Mono', monospace; font-size:14px; font-weight:700;
+  letter-spacing:3px; cursor:pointer; width:100%; text-transform:uppercase;
+  transition: background 0.3s;
+}
+.reveal-btn:hover { filter: brightness(1.1); }
+
+/* ════════════════════ TARJETA DE REALIDAD ════════════════════ */
+.card-data {
+  position:absolute; inset: -40px; background: var(--panel); border: 6px solid var(--accent);
+  padding: 80px 100px; display:flex; flex-direction:column; justify-content:center;
+  opacity:0; pointer-events:none;
+  box-shadow: 0 0 120px rgba(0,0,0,0.9);
+  z-index: 20;
+}
+.card-data.shown { opacity:1; pointer-events:auto; }
+
+.card-data-num { font-family:'Bebas Neue', sans-serif; font-size: 64px; color: var(--accent); line-height:0.9; margin-bottom:24px; text-transform: uppercase; }
+.card-data-body { font-size: 21px; line-height:1.7; color: var(--text); margin-bottom:32px; font-weight: 300; }
+.card-data-body b { color: var(--white); font-weight: 600; }
+.card-data-source { font-family:'Space Mono', monospace; font-size:11px; color: rgba(255,255,255,0.4); border-top: 1px solid var(--border); padding-top:24px; }
+
+/* ESTADO BIENVENIDA */
+.welcome-card { text-align: center; }
+.welcome-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 110px; line-height: 0.85; margin-bottom: 24px; color: var(--c-welcome); }
+.welcome-card p { font-size: 24px; color: var(--text); font-family: 'Space Mono', monospace; letter-spacing: 3px; border-top: 1px solid var(--border); display: inline-block; padding-top: 15px; }
+
+#empty-state { text-align:center; opacity:0.15; font-family:'Bebas Neue', sans-serif; font-size: 50px; }
+
+</style>
+</head>
+<body>
+
+<div id="intro-screen">
+  <div class="intro-eyebrow">ASIGNATURA INVESTIGACIÓN DE MERCADOS</div>
+  <h1 class="intro-title">DERRIBANDO MITOS </h1>
+  <div class="intro-subtitle">DE LA INVESTIGACIÓN</div>
+  <button class="intro-start" onclick="startApp()">Entrar →</button>
+</div>
+
+<div id="app">
+  <aside id="sidebar">
+    <div class="sidebar-header">Menú de Análisis</div>
+    
+    <button class="myth-btn" style="--accent:var(--c1)" onclick="selectMyth(0)">
+      <span class="myth-btn-num">Mito 01 · Rol</span>
+      <span class="myth-btn-text">La investigación es para especialistas</span>
+    </button>
+    
+
+    <button class="myth-btn" style="--accent:var(--c3)" onclick="selectMyth(1)">
+      <span class="myth-btn-num">Mito 02 · Validez</span>
+      <span class="myth-btn-text">Necesitamos números concretos</span>
+    </button>
+    
+    <button class="myth-btn" style="--accent:var(--c4)" onclick="selectMyth(2)">
+      <span class="myth-btn-num">Mito 03 · Alcance</span>
+      <span class="myth-btn-text">Encuestar a todos es lo ideal</span>
+    </button>
+
+    <button class="myth-btn" style="--accent:var(--c5)" onclick="selectMyth(3)">
+      <span class="myth-btn-num">Mito 04 · I.A.</span>
+      <span class="myth-btn-text">La IA reemplazará a los investigadores</span>
+    </button>
+
+    <button class="myth-btn welcome-sidebar-btn" style="--accent:var(--c-welcome)" onclick="selectMyth(4)">
+      <span class="myth-btn-num">Inicio Asignatura</span>
+      <span class="myth-btn-text">Bienvenidos</span>
+    </button>
+  </aside>
+
+  <main id="stage">
+    <div class="stage-bg-text" id="bgText">REALIDAD</div>
+    
+    <div id="empty-state">Seleccioná un mito para comenzar</div>
+
+    <!-- MITO 1: ROL -->
+    <div class="myth-card" id="card-0">
+      <div class="card-myth">
+        <div class="card-myth-text">"La investigación de mercados es para especialistas técnicos. Como gerente, solo necesito recibir el informe final."</div>
+        <button class="reveal-btn" style="--accent:var(--c1)" onclick="reveal(0)">Ver la realidad →</button>
+      </div>
+      <div class="card-data" style="--accent:var(--c1)">
+        <div class="card-data-num">El directivo debe liderar</div>
+        <div class="card-data-body">La investigación de mercados es una <b>herramienta de gestión estratégica</b>, no una caja negra técnica. El directivo debe formular el problema de decisión, definir qué información necesita, evaluar la calidad metodológica y traducir hallazgos en acción. Delegar completamente la investigación es como tercerizar la estrategia.</div>
+        <div class="card-data-source">Malhotra, N. K. (2008). Investigación de mercados. Pearson Educación. Cap. 1: El rol de la investigación en la toma de decisiones gerenciales.</div>
+      </div>
+    </div>
+
+<!-- MITO 2: VALIDEZ -->
+    <div class="myth-card" id="card-1">
+      <div class="card-myth">
+        <div class="card-myth-text">"Para tomar decisiones necesitamos números concretos. Los focus groups y las entrevistas son solo charlas."</div>
+        <button class="reveal-btn" style="--accent:var(--c3)" onclick="reveal(1)">Ver la realidad →</button>
+      </div>
+      <div class="card-data" style="--accent:var(--c3)">
+        <div class="card-data-num">Rigor metodológico en ambos enfoques</div>
+        <div class="card-data-body">La investigación cualitativa <b>no son "charlas informales"</b>, son técnicas estructuradas con procedimientos sistemáticos de análisis. Mientras lo cuantitativo mide el "cuánto" y generaliza, lo cualitativo explora el <b>"por qué" con profundidad interpretativa</b>. Ambos enfoques pueden ser rigurosos o deficientes según cómo se ejecuten. Lo crítico es <b>elegir el método que responda al problema de decisión</b>, no al prejuicio.</div>
+        <div class="card-data-source">Ruiz Olabuénaga, J. I. (1996). Metodología de la investigación cualitativa. Universidad de Deusto. Cap. 1: Críticas cruzadas entre enfoques y la necesidad de reconciliación.</div>
+      </div>
+    </div>
+
+    <!-- MITO 3: ALCANCE -->
+    <div class="myth-card" id="card-2">
+      <div class="card-myth">
+        <div class="card-myth-text">"Para conocer la opinión de la población, hay que encuestar a la mayor cantidad posible de personas."</div>
+        <button class="reveal-btn" style="--accent:var(--c4)" onclick="reveal(2)">Ver la realidad →</button>
+      </div>
+      <div class="card-data" style="--accent:var(--c4)">
+        <div class="card-data-num">400 casos bien seleccionados</div>
+        <div class="card-data-body">Una muestra de <b>400 casos seleccionados aleatoriamente</b> permite estimar la opinión de una población con <b>margen de error de ±4.9% y 95% de confianza</b>. Lo crítico no es el tamaño absoluto sino la <b>representatividad y aleatoriedad</b> de la muestra. Aumentar a 1,600 casos solo reduce el error a ±2.5% con costos 4 veces mayores.</div>
+        <div class="card-data-source">Kinnear, T. C., & Taylor, J. R. (1998). Investigación de mercados: un enfoque aplicado. McGraw-Hill. Cap. 14: Teoría del muestreo y determinación del tamaño de la muestra. | Caso histórico: The Literary Digest (1936) - Encuesta fallida con 2.4 millones de respuestas, derrotada por una muestra de 3,500 casos bien diseñada.</div>
+      </div>
+    </div>
+
+    <!-- MITO 4: IA -->
+    <div class="myth-card" id="card-3">
+      <div class="card-myth">
+        <div class="card-myth-text">"La inteligencia artificial reemplazará pronto a los investigadores, porque puede analizar datos y entrevistar sin errores."</div>
+        <button class="reveal-btn" style="--accent:var(--c5)" onclick="reveal(3)">Ver la realidad →</button>
+      </div>
+      <div class="card-data" style="--accent:var(--c5)">
+        <div class="card-data-num">IA como herramienta, no reemplazo</div>
+        <div class="card-data-body">La IA puede <b>acelerar el análisis y síntesis</b>, pero no reemplaza el criterio de investigación. Puede procesar grandes volúmenes y detectar patrones, pero necesita <b>supervisión humana</b> para evitar sesgos algorítmicos, interpretaciones sin contexto y errores de diseño. La ventaja competitiva es <b>usar IA con criterio estratégico</b>.</div>
+        <div class="card-data-source">ESOMAR (2023). Guideline on the Use of AI in Market Research. Disponible en: https://www.esomar.org/what-we-do/code-guidelines/ai-in-market-research</div>
+      </div>
+    </div>
+
+    <!-- BIENVENIDA -->
+    <div class="myth-card" id="card-4">
+      <div class="card-myth welcome-card">
+        <h2>Bienvenidos a<br>la Asignatura</h2>
+        <p>ASIGNATURA INVESTIGACIÓN DE MERCADOS</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function startApp() {
+  gsap.to("#intro-screen", { opacity: 0, duration: 0.8, ease: "power2.inOut", onComplete: () => {
+    document.getElementById("intro-screen").style.display = "none";
+    gsap.to("#app", { opacity: 1, duration: 0.6 });
+  }});
+}
+
+function selectMyth(id) {
+  document.getElementById("empty-state").style.display = "none";
+  document.querySelectorAll(".myth-card").forEach(c => c.classList.remove("active"));
+  document.querySelectorAll(".card-data").forEach(d => d.classList.remove("shown"));
+  document.querySelectorAll(".myth-btn").forEach((b, i) => b.classList.toggle("active", i === id));
+  
+  const card = document.getElementById(`card-${id}`);
+  card.classList.add("active");
+  
+  // Fondo de texto dinámico
+  const bg = document.getElementById("bgText");
+  bg.innerText = (id === 4) ? "IM" : "REALIDAD";
+  
+  gsap.from(card, { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" });
+}
+
+function reveal(id) {
+  const card = document.getElementById(`card-${id}`);
+  const dataCard = card.querySelector('.card-data');
+  if (!dataCard) return;
+
+  dataCard.classList.add("shown");
+  
+  gsap.fromTo(dataCard, 
+    { scale: 0.8, opacity: 0 }, 
+    { 
+      scale: 1, 
+      opacity: 1, 
+      duration: 0.6, 
+      ease: "back.out(1.4)",
+      clearProps: "transform"
+    }
+  );
+}
+</script>
+</body>
+</html>
